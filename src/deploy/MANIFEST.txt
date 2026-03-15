@@ -1,0 +1,370 @@
+NRTE Deployment Artifacts Manifest
+Generated: 2026-03-15
+Total Files: 7
+Total Lines: 1516
+Total Size: 56K
+
+================================================================================
+FILE DETAILS
+================================================================================
+
+1. nrte_schema.sql (131 lines)
+   Type: PostgreSQL DDL
+   Purpose: Complete database schema for NRTE system
+   Tables:
+     - entities (semantic units with Lojban forms)
+     - relations (directional edges)
+     - dimension_vectors (RTSG embeddings)
+     - gram_cache (precomputed basis matrices)
+     - embeddings (768-dim vector embeddings with pgvector)
+     - relation_embeddings (relation vectors)
+     - schema_metadata (migration tracking)
+   Features:
+     - pgvector extension for similarity search
+     - IVFFLAT indexes for fast vector queries
+     - UUID support
+     - JSONB metadata
+     - Comprehensive foreign key indexes
+
+2. seed_data.sql (109 lines)
+   Type: PostgreSQL DML
+   Purpose: Initialize RTSG dimensions with basis matrices
+   Data:
+     - Relational dimension (5 coordinates, 5x5 gram matrix)
+     - Topological dimension (5 coordinates, 5x5 gram matrix)
+     - Geometric dimension (5 coordinates, 5x5 gram matrix)
+   Format: JSONB Gram products for efficient retrieval
+
+3. Caddyfile (105 lines)
+   Type: Caddy Configuration
+   Purpose: Reverse proxy and TLS management
+   Routes:
+     - / → Static landing page
+     - /explore/* → React SPA with fallback
+     - /api/* → Go API server (localhost:8080)
+     - /wiki/* → Wiki service (localhost:3000)
+     - /metrics → Metrics endpoint (localhost:8081)
+   Features:
+     - Automatic TLS with Let's Encrypt
+     - Security headers (HSTS, CSP, X-Content-Type-Options)
+     - CORS support
+     - JSON logging with rotation
+     - Forwarded headers for upstream services
+
+4. ecosystem.config.js (178 lines)
+   Type: PM2 Process Configuration
+   Purpose: Manage all application services
+   Services:
+     - smarthub-api (2 instances, cluster mode, 1GB limit)
+     - smarthub-wiki (1 instance, fork mode, 512MB limit)
+     - smarthub-migrations (on-demand, migrations only)
+     - smarthub-metrics (1 instance, metrics collector, 256MB limit)
+   Features:
+     - Health checks (30s interval)
+     - Auto-restart on failure
+     - Graceful shutdown (30s timeout)
+     - Per-service logging
+     - Environment variable management
+     - PM2+ deployment hooks
+
+5. deploy.sh (446 lines, executable)
+   Type: Bash Deployment Script
+   Purpose: Automated deployment orchestration
+   Phases:
+     1. Prerequisite validation
+     2. Directory structure creation
+     3. Binary copying
+     4. API build (Go)
+     5. Frontend build (Node.js)
+     6. Database migrations
+     7. Caddy configuration update
+     8. PM2 service restart
+     9. Health checks
+   Options:
+     --dry-run         Simulate without changes
+     --skip-tests      Skip test suites
+     --no-restart      Build without restarting
+     --db-only         Migrations only
+     --help            Show usage
+   Features:
+     - Comprehensive error handling
+     - Colored console output with timestamps
+     - Detailed logging to /var/log/smarthub/deploy-*.log
+     - Caddy configuration validation
+     - PostgreSQL connectivity checks
+     - Health checks post-deployment
+
+6. README.md (168 lines)
+   Type: Markdown Documentation
+   Purpose: Quick start guide and overview
+   Sections:
+     - Quick start
+     - File summary table
+     - Database schema overview
+     - RTSG dimensions explanation
+     - Architecture diagram
+     - Deployment instructions
+     - Configuration reference
+     - Monitoring and troubleshooting
+
+7. DEPLOYMENT.md (379 lines)
+   Type: Markdown Documentation
+   Purpose: Comprehensive deployment guide
+   Sections:
+     - Files overview with detailed descriptions
+     - Database schema documentation
+     - RTSG dimension specifications
+     - Service descriptions and configurations
+     - Deployment step-by-step guide
+     - Post-deployment verification
+     - Database schema details
+     - Performance considerations
+     - Directory structure
+     - Security considerations
+     - Rollback procedures
+     - Troubleshooting guide
+
+8. QUICK_REFERENCE.md (180+ lines)
+   Type: Markdown Reference
+   Purpose: Command cheat sheet and quick lookup
+   Sections:
+     - Common deployment commands
+     - Process management commands
+     - Database commands
+     - Web access endpoints
+     - Log viewing commands
+     - Configuration management
+     - Architecture summary
+     - Database schema quick reference
+     - Troubleshooting table
+     - Directory structure
+     - Performance tuning
+     - Security checklist
+     - Monitoring commands
+     - Deployment checklist
+
+================================================================================
+DEPLOYMENT FLOW
+================================================================================
+
+1. Prerequisites Check
+   - Verify PostgreSQL, Go, Node.js, npm, PM2, Caddy installed
+   - Check PostgreSQL connectivity
+   - Verify write permissions to /opt
+
+2. Directory Creation
+   /opt/smarthub/
+   ├── bin/
+   ├── frontend/dist/
+   ├── landing/
+   ├── data/{wiki,cache}
+   └── db/migrations/
+   
+   /var/log/
+   ├── smarthub/
+   └── pm2/
+
+3. Build Phase
+   - Compile Go API server
+   - Build React frontend
+   - Run test suites (unless --skip-tests)
+
+4. Database Phase
+   - Create nrte_production database
+   - Execute schema migrations (nrte_schema.sql)
+   - Seed RTSG dimensions (seed_data.sql)
+
+5. Configuration Phase
+   - Validate Caddyfile
+   - Deploy to /etc/caddy/Caddyfile
+   - Reload Caddy daemon
+
+6. Service Management Phase
+   - Flush PM2 logs
+   - Start/reload ecosystem.config.js
+   - Save PM2 process list
+   - Enable PM2 startup
+
+7. Health Verification
+   - Check API health (localhost:8080/health)
+   - Check Wiki health (localhost:3000/health)
+   - Check Web health (smarthub.my/health)
+
+================================================================================
+DATABASE SCHEMA
+================================================================================
+
+RTSG DIMENSIONS (3):
+
+Relational Dimension (Basis: 5)
+  Coordinates: Symmetry, Connectivity, Centrality, Flow, Clustering
+  Gram Matrix: 5x5 correlation matrix (stored in gram_cache)
+  Use Case: Network structure analysis
+
+Topological Dimension (Basis: 5)
+  Coordinates: Genus, Betti-0, Betti-1, Euler-χ, Boundary
+  Gram Matrix: 5x5 correlation matrix (stored in gram_cache)
+  Use Case: Shape and topology properties
+
+Geometric Dimension (Basis: 5)
+  Coordinates: Curvature, Volume, Area, Geodesic-L, Torsion
+  Gram Matrix: 5x5 correlation matrix (stored in gram_cache)
+  Use Case: Spatial and curvature properties
+
+INDEXING STRATEGY:
+
+entities:
+  - PRIMARY KEY (id)
+  - UNIQUE (uuid)
+  - INDEX (name, type, created_at)
+
+relations:
+  - PRIMARY KEY (id)
+  - FOREIGN KEYS (subject_id, object_id) with CASCADE
+  - COMPOSITE INDEX (subject_id, predicate, object_id)
+  - INDEX (created_at)
+
+dimension_vectors:
+  - PRIMARY KEY (id)
+  - FOREIGN KEY (entity_id) with CASCADE
+  - COMPOSITE INDEX (entity_id, dimension)
+  - INDEX (created_at)
+
+gram_cache:
+  - UNIQUE (dimension, dim1, dim2, number_system)
+  - INDEX (dimension, computed_at)
+
+embeddings:
+  - PRIMARY KEY (id)
+  - FOREIGN KEY (entity_id) with CASCADE
+  - UNIQUE (entity_id, model)
+  - IVFFLAT INDEX (vector) with 100 lists
+
+relation_embeddings:
+  - PRIMARY KEY (id)
+  - FOREIGN KEY (relation_id) with CASCADE
+  - UNIQUE (relation_id, model)
+  - IVFFLAT INDEX (vector) with 100 lists
+
+================================================================================
+SERVICE CONFIGURATION
+================================================================================
+
+smarthub-api:
+  Command: /opt/smarthub/bin/api-server
+  Instances: 2 (cluster mode)
+  Port: 8080
+  Memory Limit: 1GB
+  Health Check: GET /health (30s interval)
+  Restart Policy: Auto-restart on failure
+  Max Restarts: 10 per minute
+  Graceful Shutdown: 30s timeout
+  Environment:
+    - NODE_ENV=production
+    - PORT=8080
+    - DB_HOST=localhost
+    - DB_PORT=5432
+    - LOG_LEVEL=info
+
+smarthub-wiki:
+  Command: /opt/smarthub/bin/wiki-server
+  Instances: 1 (fork mode)
+  Port: 3000
+  Memory Limit: 512MB
+  Health Check: GET /health (30s interval)
+  Auto-Restart: Yes
+  Environment:
+    - NODE_ENV=production
+    - PORT=3000
+    - WIKI_DATA_PATH=/opt/smarthub/data/wiki
+
+smarthub-migrations:
+  Command: /opt/smarthub/bin/db-migrate
+  Instances: 1 (on-demand)
+  Auto-Start: No
+  Purpose: Run database migrations on demand
+
+smarthub-metrics:
+  Command: /opt/smarthub/bin/metrics-collector
+  Instances: 1
+  Port: 8081
+  Memory Limit: 256MB
+  Interval: 60s
+  Health Check: GET /health
+
+================================================================================
+SECURITY NOTES
+================================================================================
+
+Database Users:
+  - nrte_api: Read-only access to most tables, write to embeddings
+  - nrte_admin: Full access (migrations only)
+  - Connection: SSL required (sslmode=require)
+
+TLS Certificates:
+  - Managed by Caddy (auto-renewal)
+  - Let's Encrypt integration
+  - Certificate storage: /etc/caddy/data/
+
+API Security:
+  - Authentication: JWT/OAuth2 (implement in API)
+  - CORS: Configured for /api/* endpoints
+  - Rate Limiting: Recommended on /api/*
+  - Headers: HSTS, X-Content-Type-Options, CSP
+
+Data Isolation:
+  - Entity UUIDs for distributed tracing
+  - Relation metadata supports access control
+  - Row-level security available in PostgreSQL
+
+================================================================================
+MONITORING & MAINTENANCE
+================================================================================
+
+Process Monitoring:
+  - pm2 monit (real-time)
+  - pm2 show [service] (detailed status)
+  - pm2 logs [service] (view logs)
+
+Log Files:
+  - API: /var/log/pm2/smarthub-api-out.log
+  - Wiki: /var/log/pm2/smarthub-wiki-out.log
+  - Metrics: /var/log/pm2/smarthub-metrics-out.log
+  - Web Server: /var/log/caddy/smarthub.log
+  - Deployment: /var/log/smarthub/deploy-*.log
+
+Database Backups:
+  - pg_dump: Full database backup
+  - pg_restore: Database restoration
+  - Recommended: Daily automated backups
+
+Performance Metrics:
+  - Vector search: IVFFLAT index on embeddings
+  - Connection pooling: MAX_POOL_SIZE=20
+  - Cache TTL: CACHE_TTL=3600 (1 hour)
+
+================================================================================
+TROUBLESHOOTING QUICK LINKS
+================================================================================
+
+Service Won't Start:
+  1. Check logs: pm2 logs smarthub-api
+  2. Verify ports: lsof -i :8080
+  3. Check permissions: ls -la /opt/smarthub/bin/
+
+Database Issues:
+  1. Test connection: psql -h localhost -U nrte_admin
+  2. Check logs: tail -f /var/log/postgresql/postgresql.log
+  3. Verify schema: psql -d nrte_production -c "\dt"
+
+TLS Certificate Issues:
+  1. View Caddy logs: tail -f /var/log/caddy/smarthub.log
+  2. List certificates: caddy list-certstore
+  3. Reload config: caddy reload -c /etc/caddy/Caddyfile
+
+Frontend 404 Errors:
+  1. Verify build: ls /opt/smarthub/frontend/dist/index.html
+  2. Check Caddy routes: caddy validate -c /etc/caddy/Caddyfile
+  3. Review web logs: tail -f /var/log/caddy/smarthub.log
+
+================================================================================

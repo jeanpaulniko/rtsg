@@ -1,0 +1,38 @@
+# Rust build artifacts
+/target/
+*.rlib
+*.rmeta
+Cargo.lock
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-*
+
+# Build outputs
+*.so
+*.dylib
+*.dll
+*.a
+*.lib
+
+# Generated documentation
+/doc/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+*.exe
+
+# Temporary files
+*.tmp
+*.bak
+*.orig
+
+# Testing outputs
+.tarpaulin-report.html
+cobertura.xml

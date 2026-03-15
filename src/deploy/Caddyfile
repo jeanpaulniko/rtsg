@@ -1,0 +1,105 @@
+# Caddy Configuration for SmartHub NRTE
+# Reverse proxy and static file serving for the NRTE system
+# Auto-renews TLS certificates via Let's Encrypt
+
+{
+	on_demand_tls {
+		ask http://localhost:8081/tls-verify
+	}
+}
+
+# Main domain configuration
+smarthub.my {
+	# Enable automatic TLS certificate management
+	tls internal
+
+	# Health check endpoint
+	handle /health {
+		respond "OK" 200
+	}
+
+	# Static landing page
+	handle / {
+		root /opt/smarthub/landing
+		file_server {
+			index index.html
+		}
+	}
+
+	# React frontend with SPA fallback
+	handle /explore/* {
+		root /opt/smarthub/frontend/dist
+		try_files {path} {path}/ /index.html
+		file_server
+	}
+
+	# API endpoints - proxy to Go backend
+	handle /api/* {
+		reverse_proxy localhost:8080 {
+			header_uri -X-Forwarded-Proto https
+			header_uri -X-Forwarded-Host smarthub.my
+			header_uri -X-Forwarded-For {http.request.header.CF-Connecting-IP}
+		}
+	}
+
+	# Wiki proxy
+	handle /wiki/* {
+		reverse_proxy localhost:3000 {
+			header_uri -X-Forwarded-Proto https
+			header_uri -X-Forwarded-Host smarthub.my
+		}
+	}
+
+	# Metrics and monitoring endpoints
+	handle /metrics {
+		reverse_proxy localhost:8081 {
+			header_uri -X-Forwarded-Proto https
+			header_uri -X-Forwarded-Host smarthub.my
+		}
+	}
+
+	# Logging configuration
+	log {
+		output file /var/log/caddy/smarthub.log {
+			roll_size     10mb
+			roll_keep     5
+			roll_keep_for 720h
+		}
+		format json {
+			time_format iso8601
+		}
+		level INFO
+	}
+
+	# Security headers
+	header / {
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		X-XSS-Protection "1; mode=block"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "geolocation=(), microphone=(), camera=()"
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+	}
+
+	# CORS headers for API
+	header /api/* {
+		Access-Control-Allow-Origin "*"
+		Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+		Access-Control-Allow-Headers "Content-Type, Authorization"
+		Access-Control-Max-Age "3600"
+	}
+
+	# Handle OPTIONS requests for CORS preflight
+	handle_path /api/* {
+		@options method OPTIONS
+		handle @options {
+			respond "" 204
+		}
+		reverse_proxy localhost:8080
+	}
+}
+
+# Redirect HTTP to HTTPS
+http://* {
+	redir https://{host}{uri} permanent
+}

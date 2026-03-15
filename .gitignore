@@ -1,0 +1,21 @@
+node_modules/
+__pycache__/
+*.pyc
+.env
+*.egg-info/
+dist/
+build/
+target/
+*.o
+*.so
+*.dylib
+.DS_Store
+*.pdf
+*.epub
+*.docx
+# Proprietary pattern weights and trained models
+models/
+weights/
+*.onnx
+*.pt
+*.safetensors

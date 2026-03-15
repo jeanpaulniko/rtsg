@@ -1,0 +1,28 @@
+[package]
+name = "smarthub-compute"
+version = "0.1.0"
+edition = "2021"
+authors = ["RTSG Framework Team"]
+description = "High-performance p-adic and adelic inner product computations for RTSG"
+license = "Apache-2.0"
+
+[lib]
+crate-type = ["cdylib"]
+name = "smarthub_compute"
+
+[[bin]]
+name = "test_lib"
+path = "src/bin/test_lib.rs"
+required-features = ["test_binary"]
+
+[features]
+default = []
+test_binary = []
+
+[dependencies]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true

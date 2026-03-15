@@ -1,0 +1,728 @@
+---
+title: "Filter Formalism"
+version: "2.0.0"
+last_updated: "2026-03-05"
+status: CURRENT
+---
+
+# Filter Formalism
+
+**Jean-Paul Niko** · February 2026
+
+!!! abstract "Abstract"
+    
+We develop the algebraic theory of *cognitive filters*---composable operators
+on the intelligence vector space $\\mathbb{R}^{n(e)}_{\geq 0}$ that transform raw capacity into
+effective intelligence through a canonical pipeline. We identify five species of
+filter (ceiling, developmental, cultural, state, attention), each with a distinct
+algebraic character and operating at a characteristic timescale from evolutionary
+($10^6$ years) to attentional (milliseconds). These five species form a
+*filtered category* $\Filt$ whose objects are pipeline stages and whose
+morphisms are the transformations between them. We prove a Filter Composition
+Theorem giving the explicit form of effective intelligence as the composition of
+all five species, a Kernel Composition Lemma showing that information loss
+accumulates monotonically through the pipeline, a Filter Decomposition Theorem
+separating every filter into type-preserving, cross-type, and shift components,
+and a Generalized Conceptual Irreversibility Theorem extending the CIT to
+arbitrary cross-logic filters. We then connect the formalism to portfolio theory
+(filter-adjusted returns on idea portfolios), emergence theory (emergence as kernel
+reduction through assembly), and the compatibility tensor (K as the cross-type
+component of the assembly filter). The filter formalism provides the structural
+spine of the entire IAG framework: every previously informal use of "filtering"
+across all Parts is a special case of this single algebraic object.  The three-space ontology (Part XIII) grounds each filter species in the instantiation process: filters constrain how consciousness projects from quantum space to physical reality, and the Id emerges as a zeroth pre-filter anchoring free will to evolutionary time.
+
+---
+
+%% ═══════════════════════════════════════════════════════════════
+
+## Motivation and Overview
+
+%% ═══════════════════════════════════════════════════════════════
+
+Cognitive filters appear throughout *Intelligence as Geometry* but informally---they
+show up as different things wearing different costumes:
+
+[nosep]
+- In Part VI-B, evolutionary filters shape animal intelligence vectors.
+- In the affective-somatic architecture (Part XI), hormonal state gates effective
+      intelligence via $\bI_\mathrm{eff} = \bI \odot \eta(\Psi)$.
+- In the CIT (Part V), the inter-regional functors $A$ and $I$ are filters---they
+      transform content and lose information in the process.
+- In emergence theory (Part XII), the compatibility matrix $K$ filters which
+      synergies are possible.
+- In IdeaRank (Part I), what ideas are accessible to an agent is filtered by their
+      intelligence profile.
+- In the attention simplex (Part III), the replicator dynamics are a filter on
+      cognitive resource allocation.
+
+Every one of these is the same algebraic object in different clothes. This paper
+formalizes that object: gives it a precise algebraic structure, a composition law,
+a classification into species, and derives theorems connecting it to every other part
+of the framework.
+
+%% ═══════════════════════════════════════════════════════════════
+
+## The Category of Cognitive Filters
+
+%% ═══════════════════════════════════════════════════════════════
+
+!!! definition "Cognitive Filter"
+\tA\;
+A *cognitive filter* is a smooth map $F: \R^n_{\geq 0} \to \R^n_{\geq 0}$
+(where $n = |T|$ is the number of intelligence types, currently $n = 8$) equipped with:
+[nosep]
+- A *domain stage* $\sigma$ and *codomain stage* $\tau$
+      (what phase of the pipeline it connects);
+- A *type coupling matrix* $M_F \in \R^{n \times n}$ such that the
+      Jacobian $\partial F_t / \partial I_s$ is controlled by $M_F$---meaning the
+      filter's cross-type behavior is explicit.
+
+The identity filter is $\Id: \bI \mapsto \bI$. Composition is ordinary function
+composition: $(F_2 \circ F_1)(\bI) = F_2(F_1(\bI))$.
+
+!!! definition "The Category $\Filt$"
+\tB\;
+Define $\Filt$ as follows.
+
+**Objects** are six pipeline stages:
+\begin{center}
+
+*[Table — see PDF]*
+
+\end{center}
+
+**Morphisms** from $\sigma_i$ to $\sigma_j$ (where $i \leq j$) are the filter
+maps. The constraint $i \leq j$ enforces temporal ordering---you cannot un-develop,
+you cannot genetically re-engineer yourself by paying attention differently. The
+pipeline flows one direction.
+
+**Automorphisms**: Within each stage, there are automorphisms.
+$\Hom(\sigma_i, \sigma_i)$ is the *modulation group* at stage $i$:
+[nosep]
+- $\Hom(\sigma_1, \sigma_1)$: trivial for biological agents (you cannot change your
+      genetic ceiling), nontrivial for machine agents (you can swap the model).
+- $\Hom(\sigma_3, \sigma_3)$: the group of cultural transformations---education,
+      migration, language acquisition, tool adoption.
+- $\Hom(\sigma_4, \sigma_4)$: the group generated by sleep, drugs, exercise,
+      emotional events.
+
+!!! remark "Remark"
+
+$\Filt$ has the structure of a *filtered category*---a beautiful self-reference,
+since we are literally building a theory of filters using a filtered category.
+
+%% ═══════════════════════════════════════════════════════════════
+
+## Five Species of Filter
+
+%% ═══════════════════════════════════════════════════════════════
+
+The five species correspond to the five stage transitions of the canonical pipeline.
+Each has a distinct algebraic character.
+
+### Species 1: Ceiling Filters ($F_\mathrm{ceil
+$)}
+
+!!! definition "Ceiling Filter"
+\tA\;
+The *ceiling filter* projects onto a box determined by the substrate:
+\begin{keyeqn}
+\[
+F_\mathrm{ceil}(\bI; \bI_{\max}) = 
+\bigl(\min(I_1, I_{\max,1}),\; \ldots,\; \min(I_8, I_{\max,8})\bigr)
+\]
+\end{keyeqn}
+The ceiling vector $\bI_{\max}$ is set by the substrate. For humans,
+$\bI_{\max} \approx (3, 3, 3, 3, 3, 3, 3, 3)$ in cog units. For a dolphin,
+$I_{\max,\mathrm{symb}} \approx 0$.
+
+!!! proposition "Ceiling Idempotence"
+\tA\;
+$F_\mathrm{ceil}^2 = F_\mathrm{ceil}$. Applying the ceiling filter twice is the same
+as applying it once. This is the algebraic signature of a hard constraint.
+
+??? proof "Proof"
+
+$\min(\min(I_k, I_{\max,k}), I_{\max,k}) = \min(I_k, I_{\max,k})$ for all $k$.
+
+**Properties:** Timescale: evolutionary ($10^6$ years). Irreversible.
+Type-preserving (diagonal).
+
+### Species 2: Developmental Filters ($F_\mathrm{dev
+$)}
+
+!!! definition "Developmental Filter"
+\tA\;
+The *developmental filter* shapes the profile within the ceiling via diagonal
+scaling with learned coefficients:
+\begin{keyeqn}
+\[
+F_\mathrm{dev}(\bI; \mathbf{d}) = \diag(d_1, \ldots, d_8) \cdot \bI, 
+\qquad d_t \in [0, 1]
+\]
+\end{keyeqn}
+A child who never encounters music has $d_\mathrm{aud} \approx 0.2$ (undeveloped).
+One immersed in music has $d_\mathrm{aud} \approx 0.9$.
+
+!!! remark "Remark"
+
+Developmental filters are *path-dependent*: the coefficient $d_t$ depends on the
+developmental history, not just the current state. This is a feature not captured by a
+static matrix---$\mathbf{d}$ is a functional of the life history trajectory.
+
+**Properties:** Timescale: decades. Partially reversible. Type-preserving (diagonal).
+
+### Species 3: Cultural Filters ($F_\mathrm{cult
+$)}
+
+!!! definition "Cultural Filter"
+\tA\;
+Culture does not just scale---it provides tools that effectively extend capability.
+The cultural filter is:
+\begin{keyeqn}
+\[
+F_\mathrm{cult}(\bI; A) = (\Id + A) \cdot \bI
+\]
+\end{keyeqn}
+where $A \in \R^{8 \times 8}$ is the *cultural amplification matrix* with
+$A_{tt} \geq 0$ (culture can amplify any type) and $A_{st}$ encoding cross-type cultural
+leverage (mathematical notation amplifies $I_A$ through $I_L$---you need language to
+access symbolic tools).
+
+!!! proposition "Cultural Expansion"
+\tA\;
+$\|F_\mathrm{cult}(\bI)\|$ can exceed $\|\bI\|$. Culture is the only filter species
+that is reliably **expansive**.
+
+??? proof "Proof"
+
+$\|(\Id + A)\bI\| \geq \|\bI\|$ whenever $A\bI$ has non-negative inner product with
+$\bI$, which holds when $A$ has non-negative diagonal entries and $\bI \geq 0$.
+Since $A_{tt} \geq 0$ by definition, the result follows.
+
+**Properties:** Timescale: years. Reversible (slowly). Cross-type coupling present.
+**Only expansive species.**
+
+### Species 4: State Filters ($F_\mathrm{state
+$)}
+
+!!! definition "State Filter"
+\tA\;
+The *state filter* is the instantaneous modulator from the affective-somatic
+architecture (Part XI):
+\begin{keyeqn}
+\[
+F_\mathrm{state}(\bI; \Psi) = \bI \odot \eta(\Psi)
+\]
+\end{keyeqn}
+where $\Psi = (e, p, a, \varphi)$ is the psychophysiological state vector and
+$\eta: \Psi\text{-space} \to [0,1]^8$ is the modulation function.
+
+**Properties:** Timescale: hours to days. Routinely reverses (sleep restores
+$\eta \to \mathbf{1}$). Type-preserving (diagonal).
+
+### Species 5: Attention Filters ($F_\mathrm{attn
+$)}
+
+!!! definition "Attention Filter"
+\tA\;
+The *attention filter* selects which types are deployed via the attention
+allocation $\lambda \in \Delta^7$:
+\begin{keyeqn}
+\[
+F_\mathrm{attn}(\bI; \lambda) = \bI \odot \frac{\lambda}{\max(\lambda)}
+\]
+\end{keyeqn}
+normalized so the dominant type is fully deployed.
+
+**Properties:** Timescale: milliseconds to minutes. Fully reversible. Voluntary
+(hypervisor-governed). Fastest-varying.
+
+### The Temporal Filtration Hierarchy
+
+\begin{keythm}
+The five species form a *filtration*---a hierarchy of temporal grain:
+\begin{center}
+
+*[Table — see PDF]*
+
+\end{center}
+Fast filters modulate within the envelope set by slow filters. The genetic ceiling
+constrains development. Development constrains the reach of cultural amplification.
+Culture constrains what states are possible. State constrains what attention can access.
+\end{keythm}
+
+%% ═══════════════════════════════════════════════════════════════
+
+## Three-Space Grounding of the Filter Pipeline
+
+%% ═══════════════════════════════════════════════════════════════
+
+The three-space ontology (Part XIII) provides a deeper interpretation of every filter species.  In the co-primordial framework, the CS operator $\CS$ does not emerge from physical substrates---it *co-exists* with quantum space $\QS$ and physical space $\PS$ from moment zero.  Each filter species corresponds to a specific constraint on the instantiation process $\Inst: \QS \to \PS$ by which consciousness produces moments of physical reality.
+
+\begin{keythm}
+**Three-Space Filter Interpretation.**  Each filter species restricts a different aspect of the $\QS \to \PS$ projection:
+\begin{center}
+
+*[Table — see PDF]*
+
+\end{center}
+\end{keythm}
+
+### The Id as Species 0: The Pre-Filter
+
+The three-space ontology reveals a sixth filter---or rather, a *zeroth* filter---that operates before the five species cascade begins.
+
+!!! definition "The Id Filter"
+\tB\;
+The *Id* is the evolutionary pre-filter that enforces physical-time constraints on free will.  In the three-space framework, the Id anchors $\CS$ to physical time $t_\R$ and prevents consciousness from exercising its lateral temporal freedom ($t_{\mathrm{lat}}$) in ways that would compromise biological survival:
+\begin{keyeqn}
+\[
+F_{\mathrm{Id}}(\bI; \bI_{\mathrm{evo}}) = \bI + \bI_{\mathrm{evo}} \cdot \mathbf{1}_{[\text{survival}]}
+\]
+\end{keyeqn}
+The Id is not a ceiling (it does not simply cap types) but a *redirection*: it injects evolutionary imperatives into the filter cascade as non-negotiable demands.  When activated, it pre-empts the attention filter, overriding hypervisor allocation in favor of survival-salient types.
+
+!!! remark "Remark"
+
+The full cascade is thus: Id $\to$ Ceiling $\to$ Developmental $\to$ Cultural $\to$ State $\to$ Attention.  The Id filter is species 0 because it operates at the deepest temporal scale---evolutionary time---and its effects are the least reversible of all.  Unlike the ceiling filter (which sets hard limits), the Id is a *dynamic hijack*: it does not permanently cap capability but temporarily redirects it under existential pressure.  The "fight or flight" response, sexual arousal overriding higher cognition, and the startle reflex are all manifestations of the Id filter pre-empting the normal cascade.
+
+### Filter Species and Memory Architecture
+
+The three-space ontology also reveals that each filter species operates on a different algebraic component of memory:
+
+\begin{intuition}
+[nosep]
+- **Ceiling** constrains which memory *types* are available---what the substrate can store.
+- **Developmental** shapes *procedural memory*: the $K$-matrix sculpting that determines synergy patterns.  Procedural memory is not "stored" but *built into* the compatibility matrix through developmental filtering.
+- **Cultural** provides *semantic memory* structure: the $p$-adic hierarchies ($\Qp$-topology) that organize conceptual knowledge.  Different cultures induce different convergence conditions, producing genuinely different ultrametric trees over the same conceptual domain.
+- **State** modulates *working memory*: the $\Delta^7$-simplex capacity available at each moment.
+- **Attention** selects from *episodic memory*: the $\R$-addressed timeline of experienced events.
+
+\end{intuition}
+
+%% ═══════════════════════════════════════════════════════════════
+
+## The Filter Composition Theorem
+
+%% ═══════════════════════════════════════════════════════════════
+
+\begin{keythm}
+
+!!! theorem "Filter Composition"
+\tA\;
+For the canonical pipeline 
+$F = F_\mathrm{attn} \circ F_\mathrm{state} \circ F_\mathrm{cult} \circ 
+F_\mathrm{dev} \circ F_\mathrm{ceil}$, the effective intelligence is:
+
+\[
+\boxed{
+\bI_\mathrm{eff} = \lambda \odot \eta(\Psi) \odot (\Id + A) \cdot 
+\diag(\mathbf{d}) \cdot \min(\bI_\mathrm{raw}, \bI_{\max})
+}
+\]
+
+The total filter loss at any given moment is:
+
+\[
+L(F) = \|\bI_\mathrm{raw}\| - \|\bI_\mathrm{eff}\|
+\]
+
+This decomposes into five non-negative terms, one per species, that sum to the total
+loss. The decomposition tells you where the bottleneck is---is this agent limited by
+genetics, development, culture, state, or attention?
+
+\end{keythm}
+
+??? proof "Proof"
+
+By direct substitution through the pipeline:
+
+\[\begin{aligned}
+\bI_1 &= F_\mathrm{ceil}(\bI_\mathrm{raw}) = \min(\bI_\mathrm{raw}, \bI_{\max})   
+\bI_2 &= F_\mathrm{dev}(\bI_1) = \diag(\mathbf{d}) \cdot \bI_1   
+\bI_3 &= F_\mathrm{cult}(\bI_2) = (\Id + A) \cdot \bI_2   
+\bI_4 &= F_\mathrm{state}(\bI_3) = \bI_3 \odot \eta(\Psi)   
+\bI_5 &= F_\mathrm{attn}(\bI_4) = \bI_4 \odot \lambda / \max(\lambda)
+\end{aligned}\]
+
+Composing: $\bI_\mathrm{eff} = \bI_5 = \lambda \odot \eta(\Psi) \odot 
+(\Id + A) \cdot \diag(\mathbf{d}) \cdot \min(\bI_\mathrm{raw}, \bI_{\max})$.
+
+For the loss decomposition, define incremental losses:
+
+\[\begin{aligned}
+L_\mathrm{ceil} &= \|\bI_\mathrm{raw}\| - \|\bI_1\|   
+L_\mathrm{dev} &= \|\bI_1\| - \|\bI_2\|   
+L_\mathrm{cult} &= \|\bI_2\| - \|\bI_3\| \quad \text{(can be negative---culture expands)}   
+L_\mathrm{state} &= \|\bI_3\| - \|\bI_4\|   
+L_\mathrm{attn} &= \|\bI_4\| - \|\bI_5\|
+\end{aligned}\]
+
+These are telescoping: $\sum L_i = \|\bI_\mathrm{raw}\| - \|\bI_\mathrm{eff}\| = L(F)$.
+Note $L_\mathrm{cult}$ can be negative (cultural gain), while all others are
+non-negative under normal conditions.
+
+%% ═══════════════════════════════════════════════════════════════
+
+## The Kernel Composition Lemma
+
+%% ═══════════════════════════════════════════════════════════════
+
+!!! definition "Thresholded Kernel"
+\tA\;
+The *thresholded kernel* of filter $F$ at threshold $\theta$ is:
+\[
+\ker_\theta(F) = \{t \in T : F(\bI)_t < \theta\}
+\]
+The set of intelligence types killed below threshold by the filter.
+
+\begin{keythm}
+
+!!! lemma "Kernel Composition"
+\tA\;
+For composed filters:
+
+\[
+\ker_\theta(F_2 \circ F_1) \supseteq \ker_\theta(F_1) \cup \ker_\theta(F_2)
+\]
+
+The killed types accumulate. If $\ker(F_1) \subseteq \ker(F_2)$, then $F_1$ is
+*redundant*---$F_2$ already kills everything $F_1$ kills. The non-redundant
+(marginal) loss of $F_2$ given $F_1$ is:
+
+\[
+L_\mathrm{marginal}(F_2 \mid F_1) = |\ker_\theta(F_2) \setminus \ker_\theta(F_1)|
+\]
+
+\end{keythm}
+
+??? proof "Proof"
+
+If $t \in \ker_\theta(F_1)$, then $F_1(\bI)_t < \theta$. Since $F_2$ maps
+$\R^n_{\geq 0} \to \R^n_{\geq 0}$ and (for non-expansive species) cannot amplify
+below-threshold components above threshold, $F_2(F_1(\bI))_t < \theta$, so
+$t \in \ker_\theta(F_2 \circ F_1)$. Similarly, if $t \in \ker_\theta(F_2)$ (meaning
+$F_2$ kills type $t$ for *any* input above threshold), then $t$ remains killed
+in the composition. Hence the union is contained in the composed kernel.
+
+For the marginal loss: the new types killed by $F_2$ that were not already killed by
+$F_1$ form the set difference $\ker_\theta(F_2) \setminus \ker_\theta(F_1)$.
+
+\begin{intuition}
+This is exactly the structure of the **Heyting gap**, generalized. The CIT
+(Part V) says the round-trip $R_\mathrm{cl} = I \circ A$ has a kernel equal to the
+intermediate truth values. That is a filter with $\ker = \text{Heyting gap}$. The
+filter formalism says: *every* cognitive transformation has a gap, and the gaps
+compose.
+\end{intuition}
+
+%% ═══════════════════════════════════════════════════════════════
+
+## The Filter Decomposition Theorem
+
+%% ═══════════════════════════════════════════════════════════════
+
+\begin{keythm}
+
+!!! theorem "Filter Decomposition"
+\tB\;
+Every cognitive filter $F: \R^n_{\geq 0} \to \R^n_{\geq 0}$ that appears in the IAG
+framework decomposes uniquely as:
+
+\[
+F = F_\mathrm{diag} \circ F_\mathrm{cross} + F_\mathrm{shift}
+\]
+
+where:
+[nosep]
+- $F_\mathrm{diag} = \diag(f_1, \ldots, f_8)$ is the *type-preserving
+      component*---how each type is independently scaled (modulation);
+- $F_\mathrm{cross}$ has zero diagonal---*pure cross-type coupling*, how
+      type $s$ affects type $t \neq s$ (interaction);
+- $F_\mathrm{shift}$ is a *constant translation*---the additive component
+      independent of input (endowment).
+
+\end{keythm}
+
+??? proof "Proof"
+
+For any smooth $F$ with $F(\mathbf{0}) = F_\mathrm{shift}$, the linearization gives
+$F(\bI) \approx F_\mathrm{shift} + J_F \cdot \bI$ where $J_F$ is the Jacobian. 
+Decompose $J_F = D + C$ where $D = \diag(J_{11}, \ldots, J_{88})$ is the diagonal part
+and $C = J_F - D$ is the off-diagonal part. Then
+$F(\bI) \approx F_\mathrm{shift} + D\bI + C\bI$, giving the claimed decomposition
+to first order. Uniqueness follows from the uniqueness of the diagonal/off-diagonal
+split.
+
+!!! remark "Scaling tools vs.\ additive tools"
+
+This decomposition separates three fundamentally different operations:
+[nosep]
+- **Scaling tools** (education, training) = $F_\mathrm{diag}$ and
+      $F_\mathrm{cross}$---they multiply your existing capacity.
+- **Additive tools** (calculators, GPS, spell-checkers) = $F_\mathrm{shift}$---they
+      add a fixed contribution regardless of who uses them.
+
+A calculator adds a fixed $I_A$ contribution whether your $I_A$ is 0.5 or 2.5.
+Education scales your existing $I_A$. The distinction falls directly out of the decomposition.
+
+%% ═══════════════════════════════════════════════════════════════
+
+## $K$ as Cross-Type Filter
+
+%% ═══════════════════════════════════════════════════════════════
+
+\begin{keythm}
+
+!!! theorem "$K$ as Cross-Type Filter"
+\tA\;
+The compatibility matrix $K$ (Part I, \S4) is the cross-type component of the
+*assembly filter*. Specifically, when assembling engines $\mathcal{E}_1$ and
+$\mathcal{E}_2$, the assembly filter $F_\mathrm{assembly}$ acts on the stacked vector
+$(\bI_1, \bI_2)$ and produces $\bI_A$. The cross-type component of
+$F_\mathrm{assembly}$ is:
+
+\[
+(F_\mathrm{cross})_{st} = K_{st} - 1
+\]
+
+[nosep]
+- Synergy ($K > 1$) $\Rightarrow$ expansive cross-type filter in that pair.
+- Interference ($K < 1$) $\Rightarrow$ contractive cross-type filter.
+- Neutrality ($K = 1$) $\Rightarrow$ zero cross-type filter (types don't interact).
+
+\end{keythm}
+
+??? proof "Proof"
+
+From the bundle intelligence formula (Part I, Eq. 1), the synergy correction to type $t$
+from the interaction of type $s$ across engines $i, j$ is proportional to $(K_{st} - 1)$.
+This is exactly the off-diagonal entry of the linearized assembly map at the activated
+components. The diagonal entries are 1 (identity on individual capacities), confirming
+that the cross-type filter is $K - \Id$.
+
+!!! corollary "Synergy Dimension"
+\tA\;
+The *synergy dimension* of an assembly is $\rank(K - \Id)$: the number of
+independent synergy channels. For the current $8 \times 8$ human compatibility tensor,
+all off-diagonal entries are nonzero, so $\rank(K - \Id) = 8$ generically---all types
+participate in cross-type interaction.
+
+%% ═══════════════════════════════════════════════════════════════
+
+## Generalized Conceptual Irreversibility
+
+%% ═══════════════════════════════════════════════════════════════
+
+\begin{keythm}
+
+!!! theorem "Generalized Conceptual Irreversibility"
+\tB\;
+Let $F: \sigma_i \to \sigma_j$ be any cognitive filter. Define the *reverse filter*
+$\tilde{F}: \sigma_j \to \sigma_i$ as the best approximation to $F^{-1}$ (the left
+inverse minimizing $\|\tilde{F} \circ F - \Id\|$). Then:
+[label=(\roman*)]
+- $\tilde{F} \circ F = \Id$ if and only if $F$ is injective (no information loss).
+- $F \circ \tilde{F} = \Id$ if and only if $F$ is surjective (no information gain).
+- If the domain and codomain of $F$ have **different logical types**---in the
+      sense that the subobject classifiers of the conceptual topoi at $\sigma_i$ and
+      $\sigma_j$ are non-isomorphic---then $F$ is neither injective nor surjective.
+      **Both round-trips are lossy.**
+
+\end{keythm}
+
+??? proof "Proof"
+[Proof sketch]
+Parts (i) and (ii) are standard linear algebra (the filter's linear approximation has a
+left/right inverse iff injective/surjective respectively).
+
+For part (iii): if the subobject classifiers $\Omega_i$ and $\Omega_j$ are
+non-isomorphic, then the conceptual categories at the two stages have different truth
+value structures. A filter $F: \sigma_i \to \sigma_j$ must map truth values in
+$\Omega_i$ to truth values in $\Omega_j$. If $|\Omega_i| > |\Omega_j|$ (e.g.,
+Heyting to Boolean), the map collapses intermediate truth values---it has nontrivial
+kernel, hence is not injective. If $|\Omega_i| < |\Omega_j|$, the map cannot reach all
+truth values---it is not surjective. If the algebras are incomparable, both failures
+occur. This generalizes the CIT proof from Part V.
+
+\begin{keythm}
+**Irreversibility Classification by Stage Transition:**
+\begin{center}
+
+*[Table — see PDF]*
+
+\end{center}
+\end{keythm}
+
+!!! remark "Prediction for AI systems"
+
+If an AI system operates with Boolean logic (classical computation, no vagueness), then
+human-to-AI translation is exactly the CIT---lossy in the Heyting gap. If an AI system
+develops genuine conceptual vagueness (Heyting internal logic), the translation loss
+depends on *which* Heyting algebra---and two non-isomorphic Heyting algebras still
+produce irreversibility. Perfect translation requires isomorphic subobject classifiers.
+
+**Different AI architectures have different translation losses with humans,
+measurable as the mismatch between their internal logics.**
+
+%% ═══════════════════════════════════════════════════════════════
+
+## Filter-Adjusted Portfolio Theory
+
+%% ═══════════════════════════════════════════════════════════════
+
+!!! definition "Filter-Adjusted Return"
+\tB\;
+Given an idea portfolio $P = \{\iota_1, \ldots, \iota_m\}$ and an agent with filter
+chain $F = F_5 \circ \cdots \circ F_1$, the *filter-adjusted return* of the
+portfolio is:
+\begin{keyeqn}
+
+\[
+R_F(P) = \sum_i Q(\iota_i, \xi) \cdot \mathcal{A}(\iota_i, F)
+\]
+
+\end{keyeqn}
+where $Q$ is the Beautiful Equation (depth $\times$ novelty $\times$ utility $\times$
+dimensionality) from Part X, and $\mathcal{A}(\iota, F)$ is the *accessibility of
+idea $\iota$ after filtering*:
+
+\[
+\mathcal{A}(\iota, F) = \frac{\langle \bI(\iota), F(\bI_\mathrm{raw}) \rangle}
+{\|\bI(\iota)\| \cdot \|F(\bI_\mathrm{raw})\|}
+\]
+
+This is the cosine similarity between the idea's requirement vector and the agent's
+effective intelligence. An idea requiring high $I_\mathrm{spat}$ is inaccessible to an
+agent whose filter chain kills spatial intelligence.
+
+!!! remark "Perspectival utility"
+
+The same portfolio has different returns for different filter chains. A portfolio of
+mathematical ideas has high $R_F$ for an agent whose cultural filter amplifies $I_A$ and
+low $R_F$ for one whose cultural filter kills it. This is the formal content of
+"different minds find different things valuable"---present since ideometrics, but now
+with algebraic structure.
+
+!!! definition "Portfolio Risk Under Filter Uncertainty"
+\tB\;
+The *risk* of a portfolio under filter $F$ is:
+
+\[
+\sigma^2_F(P) = \mathrm{Var}_\iota\bigl[Q(\iota, \xi) \cdot 
+\mathcal{A}(\iota, F)\bigr]
+\]
+
+A portfolio concentrated in one type has high risk under filter uncertainty---if your
+state filter degrades $I_A$ tomorrow (exhaustion, illness), your entire portfolio becomes
+inaccessible. A diversified portfolio across types is filter-robust.
+
+\begin{keythm}
+
+!!! theorem "Optimal Intellectual Diversification"
+\tB\;
+The Kelly-optimal intellectual investment strategy depends on the agent's filter chain.
+Agents with volatile state filters (high variance in $\eta(\Psi)$) should diversify
+more than agents with stable ones. The efficient frontier is the set of portfolios
+maximizing $R_F$ for given $\sigma^2_F$.
+
+\end{keythm}
+
+%% ═══════════════════════════════════════════════════════════════
+
+## Emergence as Filter Bypass
+
+%% ═══════════════════════════════════════════════════════════════
+
+\begin{keythm}
+
+!!! theorem "Emergence as Kernel Reduction"
+\tA\;
+An assembly $A$ exhibits $E_2$ emergence (qualitative---new types activated) if and only
+if the assembly's effective filter chain has a strictly smaller kernel than every
+individual component's filter chain:
+
+\[
+\ker_\theta(F_A) \subset \ker_\theta(F_i) \quad \text{for all } i \in A
+\]
+
+That is: the assembly can pass through types that every individual filter blocks.
+
+\end{keythm}
+
+??? proof "Proof"
+
+$E_2$ emergence means the assembly activates intelligence types that no individual
+component activates above threshold $\theta$. For each individual $i$, 
+type $t \in \ker_\theta(F_i)$ means $F_i(\bI)_t < \theta$. If the assembly achieves
+$F_A(\bI)_t \geq \theta$ for some $t$ that is in $\ker_\theta(F_i)$ for all $i$, then
+$\ker_\theta(F_A)$ is strictly smaller. The converse: if $\ker_\theta(F_A) = \ker_\theta(F_i)$
+for some $i$, then the assembly activates no types beyond what component $i$ activates,
+contradicting $E_2$.
+
+!!! example "Example"
+
+The vision model alone has $\ker$ containing $I_\mathrm{eval}$ (below threshold). The
+language model alone has $\ker$ containing $I_\mathrm{spat}$. The assembly has neither
+in its kernel. $E_2$ emergence is kernel reduction through assembly.
+
+!!! conjecture "$E_3$ Emergence as Logic Enrichment"
+\tC\;
+$E_3$ emergence (structural---new interaction types) occurs when the assembly's filter
+chain operates with a *richer logic* than any component's. The assembly's
+conceptual topos has more truth values. This is filter bypass at the level of the
+subobject classifier, not just at the level of intelligence types.
+
+\begin{keythm}
+**Unification.** Emergence is what happens when assembling agents produces a filter
+chain with smaller kernel or richer logic than any individual chain. The compatibility
+matrix $K$ determines which assemblies achieve this. The emergence value $V(A)$ measures
+how much kernel reduction and logic enrichment occurs.
+\end{keythm}
+
+%% ═══════════════════════════════════════════════════════════════
+
+## Collected Results
+
+%% ═══════════════════════════════════════════════════════════════
+
+\begin{center}
+
+*[Table — see PDF]*
+
+\end{center}
+
+%% ═══════════════════════════════════════════════════════════════
+
+## Open Problems and Forward Connections
+
+%% ═══════════════════════════════════════════════════════════════
+
+- **Filter spectral theory.** What are the eigenvalues of filter operators?
+      Which type combinations are stable/unstable under iterated filtering?
+- **Id filter dynamics.**  How does the Id pre-filter interact with the five-species cascade?  Under what conditions does Id activation produce permanent (rather than transient) filter effects?  Can chronic Id activation (prolonged survival stress) permanently reshape the developmental or cultural filters?
+- **$p$-Adic filter topology.**  The three-space ontology suggests that cultural filters operate on $p$-adic (ultrametric) memory structures.  Can the filter composition theorem be extended to ultrametric spaces?  What is the kernel of a cultural filter in the $\Qp$-topology?
+- **IdeaRank as portfolio theory (Markowitz extension).** Develop the efficient
+      frontier of knowledge, Kelly criterion for intellectual investment, and the
+      connection to Markowitz's mean-variance optimization.
+- **Three-way CIT triangle.** Classify all filters by the logic of their source
+      and target (Boolean, Heyting, orthomodular), and prove that cross-logic filters
+      are necessarily lossy. Boolean $\leftrightarrow$ orthomodular $\leftrightarrow$ Heyting.
+- **Superintelligence substrate completion.** Characterize substrates by which
+      filters they support and which they don't. Quantum attention density matrix formalism.
+- **IdeaRank temporal dynamics.** Model cultural evolution as a time-varying
+      filter on the collective consciousness. Ideas as assets with liquidity, volatility,
+      bubbles, crashes.
+- **Empirical calibration.** Measure actual filter parameters ($\mathbf{d}$,
+      $A$, $\eta$) from psychometric and neuroimaging data.
+
+\begin{center}
+*The filter formalism is the spine of the framework.  
+Every transformation of intelligence---genetic, developmental,  
+cultural, momentary, attentional---is a single algebraic object.  [0.5em]
+What the framework lacked was a universal language for loss.  
+Now it has one: kernels compose, gaps accumulate,  
+and the structure of what is lost tells you everything  
+about the structure of what remains.*
+\end{center}
